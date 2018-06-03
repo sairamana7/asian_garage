@@ -1,68 +1,22 @@
 
-<?php
 
-    session_start();
-    if(!$_SESSION['Lsuccess'])
-    {
-      $_SESSION['error']="UN AUTHORISED LOGIN DETECTED";
-
-      header("Location:dbAutomobileLogin.php");
-    }
-      $errors=array();
-      if($_POST)
-      {
-
-        if(empty($_POST['manufacturer']))
-        {
-          $errors['manufacturer']="Select The Makers Of Your Bike";
-        }
-        if(empty($_POST['model']))
-        {
-          $errors['model']="Select your bike model";
-        }
-        if(empty($_POST['Rn1'])||empty($_POST['Rn2'])||empty($_POST['Rn3'])||empty($_POST['Rn4']))
-        {
-          $errors['Rnumber']="INVALID Registration Number";
-        }
-
-        if(empty($errors))
-        {
-          $_SESSION['bike_type']=$_POST['bike_type'];
-          $_SESSION['model']=$_POST['model'];
-          $_SESSION['manufacturer']=$_POST['manufacturer'];
-          $_SESSION['Rnumber']=$_POST['Rn1'].$_POST['Rn2'].$_POST['Rn3'].$_POST['Rn4'];
-          //echo("type = ".$_SESSION['type']." model = ".$_SESSION['model']."  manufacturer = ".$_SESSION['manufacturer']);
-          header("Location:service_details.php");
-        }
-    }
-
-    //dynamic drop down
-
-
- ?>
 
 <html>
-<head><?php
-  $pdo=new PDO('mysql:host=localhost;port=3306;dbname=garage','root','');
-  $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+<head>
 
-  //$row=$stmt->fetch(PDO::FETCH_ASSOC)
-   ?>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-
-   <!-- Latest compiled and minified CSS -->
+<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 
 <style>
-  .container{
-    align: center;
-    background-color: grey;
-    color: white;
-    padding-top: 10%;
-    padding-bottom: 20%;
-    font-size: 18px;
-  }
+.container{
+align: center;
+background-color: grey;
+color: white;
+padding-top: 10%;
+padding-bottom: 20%;
+}
 </style>
 
 <!-- Latest compiled and minified JavaScript -->
@@ -72,42 +26,42 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script>
 var t_name;
-   function getManufacturer(val)
-   {
-     t_name=val;
-    // console.log(val);
-     $.ajax({
-       type:"POST",
-       url:"get_sports.php",
-       data:'bike_id='+val,
-       success:function(data){
+function getManufacturer(val)
+{
+ t_name=val;
+// console.log(val);
+ $.ajax({
+   type:"POST",
+   url:"get_sports.php",
+   data:'bike_id='+val,
+   success:function(data){
 
-         $("#manufacturer").html(data);
-       }
-     });
+     $("#manufacturer").html(data);
    }
+ });
+}
 
-   function getModel(val)
-   {
+function getModel(val)
+{
 
-     val=t_name+" "+val;
-     console.log(val);
-     $.ajax({
+ val=t_name+" "+val;
+ console.log(val);
+ $.ajax({
 
-       type:"POST",
-       url:"get_model.php",
-       data:'model_id='+val,
-       success:function(data){
+   type:"POST",
+   url:"get_model.php",
+   data:'model_id='+val,
+   success:function(data){
 
-         $("#model").html(data);
-       }
-     });
+     $("#model").html(data);
    }
+ });
+}
 
-   document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.dropdown-trigger');
-    var instances = M.Dropdown.init(elems, options);
-  });
+document.addEventListener('DOMContentLoaded', function() {
+var elems = document.querySelectorAll('.dropdown-trigger');
+var instances = M.Dropdown.init(elems, options);
+});
 </script>
 
 <body>

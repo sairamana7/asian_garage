@@ -1,0 +1,87 @@
+<!Doctype>
+<html>
+    <head>
+        <title>Test</title>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhqBeYVJWZALWa94b35kFdq6KJZAg_BIg"
+        type="text/javascript"></script>
+        
+    </head>
+    <body>
+        <input type="text" id="source" onchange="addrCoordinate()" >
+        <input type="button" value="My Location" onclick="getMyLocation()" >
+
+        <input type="button" value="Get Distance" onclick="getDistance()">
+    </body>
+    <script>
+
+            var currentLatLng;
+            var serviceLatLng;
+       
+
+            // Get the service center lat and lng
+            serviceLatLng = new google.maps.LatLng(17.496113, 78.513131);
+
+            // Get current location
+            function getMyLocation(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                } else { 
+                    x.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            }
+
+        
+        
+            function showPosition(position) {
+                var lat;
+                var lng;
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+    
+    
+                currentLatLng = new google.maps.LatLng(lat,lng);
+                //console.log("lat: "+);
+                console.log("lng: "+lng);
+            }
+
+        var dist;
+        function getDistance(){
+            
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+            {
+                origins: [currentLatLng],
+                destinations: [serviceLatLng],
+                travelMode: 'DRIVING',
+                avoidHighways: true,
+                avoidTolls: true,
+            }, callback); 
+        }
+
+        function callback(response,status){
+    
+             //   alert(JSON.stringify(response.rows[0].elements[0].distance.text));
+              dist = response.rows[0].elements[0].distance.text;
+
+              alert(dist);
+        }
+
+        // Get from address to coordinate
+        function addrCoordinate(){
+            var source = document.getElementById("source").value;
+            var encodedAddr = encodeURIComponent(source);
+            var xhttp = new XMLHttpRequest();
+            
+            xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+            xhttp.open("GET", `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddr}`, true);
+            xhttp.send();
+        }
+
+
+    </script>
+</html>
